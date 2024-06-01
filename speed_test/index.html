@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>speed test</title>
+    <script src="for_three_js.js"></script>
+    <script src="for_three_c.js"></script>
+</head>
+<body>
+    <div id="container">
+        <h1>Speed Test</h1>
+    </div>
+    <div>
+        <div>
+            Javascript: <t id="jsTime">running...</t>
+        </div>
+        <div>
+            WASM: <t id="wasmTime">running...</t>
+        </div>
+    </div>
+    <script>
+        Module.onRuntimeInitialized = function() {
+            const n = 1000
+            const for_three_c = Module.cwrap("for_three_c", "number", ["number"]);
+            let start = new Date();
+            for_three_c(n)
+            const for_three_c_time = new Date() - start;
+            document.getElementById("wasmTime").innerText = `${for_three_c_time}ms`;
+            
+            start = new Date();
+            for_three_js(n)
+            const for_three_js_time = new Date() - start;
+            document.getElementById("jsTime").innerText = `${for_three_js_time}ms`;
+        };
+    </script>
+</body>
+</html>
